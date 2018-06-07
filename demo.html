@@ -1,111 +1,124 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>任务一</title>
-    <style>
-        body, p, ul, li{
-            margin: 0;
-            padding: 0;
+    <title>email</title>
+    <meta charset="utf-8">
+    <style type="text/css">
+        input{
+            height: 25px;
+            width: 157px;
         }
-
-        #top{
-            font-size: 14px;
-            color: #999;
-            margin: 10px;
-
+        ul{
+            margin-top: 0px;
         }
-
-        #bottom{
-            font-size: 14px;
-            color: #000;
-            margin-left: 10px;
+        li{
+            list-style-type:none;
+            margin-left: -40px;
+            border: solid 1px gray;
+            width: 	158px;
+            height: 28px;
+            line-height: 28px;
         }
-
-        #inputInfo{
-            width: 260px;
-            height: 38px;
-            font-size: 16px;
-            margin-left: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-
+        li:first-child{
+            background-color: blue;
         }
-
-        #btn{
-            width: 50px;
-            height: 36px;
-            border: 1px solid #888;
-            border-radius: 6px;
-            background: none;
-        }
-
-        #btn:focus{
-            outline: none;
-        }
-
-        #detail{
-            width: 360px;
-            margin-left: 10px;
-        }
-        #detail li{
-            width:118px;
-            height: 24px;
-            border: 1px solid #ccc;
-            float: left;
-            list-style: none;
-        }
-        #detail .del{
-            text-align: right;
-        }
-        #detail .deleteBtn{
-            border: none;
-            background: none;
-        }
-        #detail .deleteBtn:focus{
-            outline: none;
+        li:hover{
+            background-color: green;
         }
     </style>
-
 </head>
-<body>
-<p id="top">支付宝信息</p>
-<input id="inputInfo" type="text" />
-<button id="btn">+</button>
-<p id="bottom">已添加的支付宝</p>
-<div id="detail"></div>
-
-<script>
-    var inputInfo = document.getElementById('inputInfo');
-    var btn = document.getElementById('btn');
-    var detail = document.getElementById('detail');
-    var deleteBtns = detail.getElementsByClassName('deleteBtn');
-
-    //声明添加信息函数
-    function addLitoUl(obj){
-        detail.innerHTML += '<ul>' + '<li>' + obj.value + '</li>' + '<li>' + '【设为默认】' + '<li class = \'del\'>' + '<button class= \"deleteBtn\">×</button>' + '</li>' + '</ul>';
-        obj.value = '';
+<body onkeydown="key()">
+<div class="wrapper">
+    <input id="email-input" type="text">
+    <ul id="email-sug-wrapper" class="email-sug"></ul>
+</div>
+<script type="text/javascript">
+    var postfixList = ['163.com', 'gmail.com', '126.com', 'qq.com', '263.net'];
+    var getemail=document.getElementById('email-sug-wrapper');
+    var content=document.getElementById('email-input');
+    var arr=[];
+    var select=0;
+    var list = document.querySelectorAll('li');
+    content.focus();
+    content.addEventListener("input",function(event){
+        //获取用户输入，生成提示框中的提示内容，将提示内容添加到email-sug-wrapper中控制email-sug-wrapper的显示/隐藏状态
+        var t = event.target;
+        var str=getcontent(t);//返回trim的值
+        judge(str.length);//判断是否显示ul
+        arr=ergodic(str);//生成提示内容
+        remove(arr);
+    });
+    getemail.addEventListener("click", function(event) {
+        var t = event.target;
+        content.value = inner(t.innerHTML);
+        judge(false);//选择li后ul框就消失
+    });
+    function getcontent(i) {
+        //拿到input输入框的输入内容trim后返回
+        return i.value.trim();
     }
-
-    //声明删除信息函数
-    function deleteUL(obj){
-        obj.parentNode.parentNode.remove();
-
-    }
-
-    //给button绑定添加信息点击事件
-    btn.onclick = function(){
-        addLitoUl(inputInfo);
-
-        //给每个 × span绑定删除点击事件
-        for(var i=0; i<deleteBtns.length; i++){
-            console.log(22);
-            deleteBtns[i].onclick = function(){
-                console.log(this);
-                deleteUL(this);
-            };
+    //生成提示框中的提示内容
+    function ergodic(str) {
+        var twostr="";
+        var arr1=[];
+        var arr2=[];
+        //获取用户输入遍历postfixList
+        if(str.indexOf("@")!=-1){
+            var ind=str.indexOf("@");
+            twostr=str.slice(ind+1);
+            str=str.slice(0,ind);
         }
-    };
+        str=inner(str);
+        postfixList.forEach(function(el){
+            if(el.indexOf(twostr)===0){
+                arr1.push(str+"@"+el);
+            }
+            arr2.push(str+"@"+el);
+        });
+        return arr1.length?arr1:arr2;
+    }
+    function remove(list) {
+        while (getemail.firstChild) {
+            getemail.removeChild(getemail.firstChild);
+        }
+        list.forEach(function(el) {
+            //把用户输入和每一个postfix进行结合成为每一个Li
+            var li = document.createElement("li");
+            li.innerHTML = el;
+            getemail.appendChild(li);
+        });
+    }
+    //将提示内容添加到email-sug-wrapper中
+    function inner(str){
+        var con=document.createElement("div");
+        con.innerText=str;
+        var put=con.innerHTML;
+        con=null;
+        return put;
+    }
+
+    //控制email-sug-wrapper的显示/隐藏状态
+    function judge(a){
+        if (a) {
+            //显示提示框
+            getemail.style.display="block";
+        } else {
+            //隐藏提示框
+            getemail.style.display="none";
+        }
+    }
+    function key(){
+        if (event.keyCode==38) {
+            console.log("上");
+            select = select ? --select: arr.length - 1;
+
+        }
+        if (event.keyCode === 40) {
+            console.log("下");
+            select = select === arr.length - 1 ? 0 : ++select;
+
+        }
+    }
 </script>
 </body>
 </html>

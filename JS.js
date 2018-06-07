@@ -20,9 +20,13 @@ function content() {
     }                                                       //}
     return list;                    // 返回生成的提示内容
 }
+function remove(list) {
+    ulDom.removeChild(ulDom.firstChild);
+}
 /*将提示内容添加到email-sug-wrapper中*/
 function add() {
     lists = content();           //获取生成提示框中的提示内容
+    /*remove(list);*/
     ulDom.innerHTML = lists;    //将内容添加到email-sug-wrapper中
 }
 /*控制email-sug-wrapper的显示/隐藏状态*/
