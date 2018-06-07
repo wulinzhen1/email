@@ -1,0 +1,21 @@
+.email-sug{
+    list-style: none;
+    padding-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    width: 200px;
+    display: none;
+}
+#email-input{
+    width: 193px;
+    border: 1px solid #bdb9b9;
+    height: 23px;
+    padding: 3px 0 3px 5px;
+}
+.email-sug li{
+    border: 1px solid #bdb9b9;
+    border-top: 0;
+    padding: 1px 0 1px 5px;
+    color: #bdb9b9;
+
+}

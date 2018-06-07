@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>任务一</title>
+    <style>
+        body, p, ul, li{
+            margin: 0;
+            padding: 0;
+        }
+
+        #top{
+            font-size: 14px;
+            color: #999;
+            margin: 10px;
+
+        }
+
+        #bottom{
+            font-size: 14px;
+            color: #000;
+            margin-left: 10px;
+        }
+
+        #inputInfo{
+            width: 260px;
+            height: 38px;
+            font-size: 16px;
+            margin-left: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+
+        }
+
+        #btn{
+            width: 50px;
+            height: 36px;
+            border: 1px solid #888;
+            border-radius: 6px;
+            background: none;
+        }
+
+        #btn:focus{
+            outline: none;
+        }
+
+        #detail{
+            width: 360px;
+            margin-left: 10px;
+        }
+        #detail li{
+            width:118px;
+            height: 24px;
+            border: 1px solid #ccc;
+            float: left;
+            list-style: none;
+        }
+        #detail .del{
+            text-align: right;
+        }
+        #detail .deleteBtn{
+            border: none;
+            background: none;
+        }
+        #detail .deleteBtn:focus{
+            outline: none;
+        }
+    </style>
+
+</head>
+<body>
+<p id="top">支付宝信息</p>
+<input id="inputInfo" type="text" />
+<button id="btn">+</button>
+<p id="bottom">已添加的支付宝</p>
+<div id="detail"></div>
+
+<script>
+    var inputInfo = document.getElementById('inputInfo');
+    var btn = document.getElementById('btn');
+    var detail = document.getElementById('detail');
+    var deleteBtns = detail.getElementsByClassName('deleteBtn');
+
+    //声明添加信息函数
+    function addLitoUl(obj){
+        detail.innerHTML += '<ul>' + '<li>' + obj.value + '</li>' + '<li>' + '【设为默认】' + '<li class = \'del\'>' + '<button class= \"deleteBtn\">×</button>' + '</li>' + '</ul>';
+        obj.value = '';
+    }
+
+    //声明删除信息函数
+    function deleteUL(obj){
+        obj.parentNode.parentNode.remove();
+
+    }
+
+    //给button绑定添加信息点击事件
+    btn.onclick = function(){
+        addLitoUl(inputInfo);
+
+        //给每个 × span绑定删除点击事件
+        for(var i=0; i<deleteBtns.length; i++){
+            console.log(22);
+            deleteBtns[i].onclick = function(){
+                console.log(this);
+                deleteUL(this);
+            };
+        }
+    };
+</script>
+</body>
+</html>
